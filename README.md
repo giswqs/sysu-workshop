@@ -1,0 +1,2 @@
+# sysu-workshop
+This repo hosts materials for my workshop given at Sun Yat-sen University during July 19-21, 2017
