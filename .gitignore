@@ -6,4 +6,4 @@
 /_main_files/*
 _*.Rmd
 _*.*
-*.docx
+/**/*.docx
