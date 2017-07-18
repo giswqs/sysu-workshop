@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+/_bookdown_files/*
+/_main_files/*
+_*.Rmd
+_*.*
+*.docx
