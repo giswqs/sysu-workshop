@@ -1,4 +1,4 @@
-### Geog533 - Lecture W02 - R Programming
+### R data type
 
 x <- 1
 print(x)
@@ -17,7 +17,7 @@ x
 # • logical (True/False)
 
 
-#Object name
+# Object name
 # Object names cannot contain `strange' symbols like !, +, -, #.
 # A dot (.) and an underscore ( ) are allowed, also a name starting with a dot.
 # Object names can contain a number but cannot start with a number.
@@ -158,3 +158,4 @@ fix(my.data)
 list.files()
 list.files(recursive = TRUE)
 
+curve(sin,from = -10,to = 10,type = "b")
