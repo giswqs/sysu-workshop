@@ -2,3 +2,4 @@ _*.Rmd
 _*.*
 /**/*.docx
 /schedule/*.docx
+.Rproj.user
