@@ -1,0 +1,90 @@
+---
+title: "Multiple Regression"
+output: html_notebook
+---
+
+## Forumlas
+
+Specifiy predictors to be included in the formula: 
+
+* `lm(formula = y ~ u + v + w)`
+
+Include all predictors:
+
+* `lm(formula = y ~ .)`  
+
+Linear regression without an intercept: 
+
+* `lm(y ~ x + 0)`
+
+Linear regression with interaction terms: 
+
+* `lm(y ~ u*v)`
+
+Backward stepwise regression: 
+
+* `full.model <- lm(y ~ x1 + x2 + x3 + x4)`
+
+* `reduced.model <- step(full.model, direction="backward")`
+
+Forward stepwise regression: 
+
+* `min.model <- lm(y ~ 1)`
+
+* `fwd.model <- step(min.model, direction="forward", scope=( ~ x1 + x2 + x3 + x4 ))`
+
+
+## Getting Regression Statistics
+
+Save the regression model in a variable, say `m`:
+
+`m <- lm( y ~ u + v + w)`
+
+The use functions to extract regression statistics and information from the model:
+
+* `anova(m)`: ANOVA table
+
+* `coefficients(m)`: Model coefficients
+
+* `coef(m)`: Same as coefficients(m)
+
+* `confint(m)`: Confidence intervals for the regression coefficients
+
+* `deviance(m)`: Residual sum of squares
+
+* `effects(m)`: Vector of orthogonal effects
+
+* `fitted(m)`: Vector of fitted y values
+
+* `residuals(m)`: Model residuals
+
+* `resid(m)`: Same as residuals(m)
+
+* `summary(m)`: Key statistics, such as $R^2$, the $F$ statistic, and the residual standard error ($\alpha$)
+
+* `vcov(m)`: Variance–covariance matrix of the main parameters
+
+
+
+## Multiple Regression
+
+```{r}
+url <- "data/AlbumSales2.csv"
+df <- read.csv(url,header = TRUE)
+library(knitr)
+kable(head(df,10))
+
+m <- lm(sales ~ adverts + airplay + attract, data = df)
+## m <- lm(sales ~ ., data = df)
+summary(m)
+anova(m)
+coefficients(m)
+coef(m)
+a <- round(coef(m)[1],2)
+b1 <- round(coef(m)[2],2)
+b2 <- round(coef(m)[3],2)
+b3 <- round(coef(m)[4],2)
+
+```
+
+The regression equation is: $sales_i = `r a` + `r b1` \times advertsing_i + `r b2` \times airplay_i + `r b3` \times attractiveness_i$

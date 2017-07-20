@@ -1,0 +1,154 @@
+---
+title: "Regression"
+output: html_notebook
+---
+
+## Example 1
+
+### Problem 
+
+A record company boss was interested in predicting record sales from advertising.
+
+* Data:
+
+    + 200 different album releases
+  
+* Outcome variable:
+
+    + Sales (CDs and downloads) in the week after release
+
+* Predictor variable:
+
+    + The amount (in units of $1000) spent promoting the record before release.
+
+
+### Solution
+
+```{r}
+url <- "data/AlbumSales1.csv"
+df <- read.csv(url,header = TRUE)
+library(knitr)
+kable(head(df,n = 10))
+
+plot(df)
+m <- lm(df$sales ~ df$adverts)
+m
+m <- lm(sales ~ adverts, data = df)
+summary(m)
+abline(m,col="red",lwd=2)
+attributes(m)
+
+```
+
+The equation is: $sales = a + b\times adverts = 134.1399 + 0.0961 \times adverts$
+
+## Example 2
+
+Speed and Stopping Distances of Cars
+
+```{r}
+df <- cars
+library(knitr)
+kable(head(df,n = 10))
+plot(df)
+x <- cars$speed
+y <- cars$dist
+plot(y ~ x)
+m <- lm(y~x)
+m
+summary(m)
+
+abline(m,col="red",lwd=2)
+segments(x,fitted(m),x,y,col="blue",lty = "dashed")
+
+result <- cor.test(x,y,method = "pearson")
+result
+r <- result$estimate
+r2 <- r^2
+round(r2,4)
+p=1
+n=nrow(df)
+adjusted.r2 <- r2-(1-r2)*p/(n-p-1)
+round(adjusted.r2,4)
+
+```
+
+
+Make predictions based on new inputs:
+
+```{r}
+df <- cars
+m <- lm(dist~speed,data = df)
+n <- nrow(df)
+df$x <- sample(10:100,size = n)
+df$y <- predict(m,newdata = data.frame(speed=df$x))
+library(knitr)
+kable(head(df,n = 10))
+plot(df$x,df$y)
+abline(m,col="red")
+
+```
+
+
+## Example 3
+
+
+```{r}
+x <- c(65,35,30,44,80,77,32,39,44,77)
+y <- c(120,68,35,60,100,91,44,71,89,113)
+
+library(knitr)
+kable(cbind(y,x))
+
+n <- length(x)
+mx <- mean(x)
+my <- mean(y)
+sx <- sd(x)
+sy <- sd(y)
+
+numerator <- sum((x-mx)*(y-my))
+numerator
+denominator <- sum((x-mx)^2)
+denominator
+
+slope <- numerator / denominator
+slope
+intercept <- my - slope * mx
+intercept
+
+m <- lm(y~x)
+summary(m)
+
+MSS <- sum((fitted(m) - my)^2)
+MSS
+RSS <- sum((y - fitted(m))^2)
+RSS
+TSS <- RSS + MSS
+TSS
+
+df1 <- 1
+df2 <- n-2 
+df3 <- df1+df2
+
+msq1 <- MSS / df1
+msq2 <- RSS / df2
+F.value <- msq1 / msq2 
+F.value
+F.critical <- qf(0.95,df1 = 1,df2 = n-2)
+F.critical
+rsq <- MSS / TSS
+rsq
+if(F.value>F.critical){
+  print("We reject the null hypothesis")
+} else {
+  print("We cannot reject the null hypothesis")
+}
+
+```
+
+|          | Sum of squares |  df   | Mean square     |   F                |
+|----------|----------------|-------|-----------------|--------------------|
+|Regression|`r round(MSS,2)`|`r df1`|`r round(msq1,2)`|`r round(F.value,2)`|
+|Residual  |`r round(RSS,2)`|`r df2`|`r round(msq2,2)`|                    |
+|Total     |`r round(TSS,2)`|`r df3`|                 |                    |
+

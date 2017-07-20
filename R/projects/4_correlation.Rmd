@@ -1,0 +1,104 @@
+---
+title: "Correlation"
+output: html_notebook
+---
+
+## Pearson's correlation
+$$r=\frac{\sum_{n}^{i=1}(x_i-\bar{x})(y_i-\bar{y})}{(n-1)s_{x}s_{y}}$$
+
+
+### Problem
+* Anxiety and exam performance
+* Participants:
+    + 103 students
+* Measures
+    + Exam performance (%)
+    + Exam Anxiety (the EAQ, score out of 100)
+    + Time spent revising (hours)
+
+
+### Solution
+```{r}
+url <- "data/ExamAnxiety.csv"
+examData <- read.csv(url,header = TRUE)
+library(knitr)
+## display first 10 rows
+kable(head(examData,n = 10))
+plot(examData$Anxiety,examData$Exam,xlab = "Anxiety",ylab = "Exam Score")
+#abline(lm(examData$Exam~examData$Anxiety))
+cor(examData,use = "complete.obs",method = "pearson")
+cor.test(examData$Exam,examData$Anxiety,method = "pearson")
+```
+
+`alternative` indicates the alternative hypothesis and must be one of "two.sided", "greater" or "less". You can specify just the initial letter. "greater" corresponds to positive association, "less" to negative association.
+
+```{r}
+cor.test(examData$Exam, examData$Anxiety, alternative = "less", method = "pearson")
+```
+
+## Significance test 
+
+To test the null hypothesis that the true correlation coefficient, $\rho$, is equal to zero, the data for each variable are assumed to come from normal distributions.
+
+$$t=\frac{r\sqrt{n-2}}{\sqrt{1-r^2}} $$
+
+If the null hypothesis is true, this statistic has a t-distribution, with n – 2 degrees of freedom.
+
+
+```{r}
+result <- cor.test(examData$Exam, examData$Anxiety, alternative = "less", method = "pearson")
+str(result)
+r <- result$estimate
+n <- nrow(examData)
+t <- r*sqrt(n-2)/sqrt(1-r^2)
+t
+pt(t,df = n-2)
+curve(dt(x,df = n-2),from = -6,to = 6)
+t.critical <- qt(0.025,df = n-2)
+t.critical
+points(t.critical,dt(t.critical,df = n-2),pch=16,col="red")
+points(t,dt(t,df = n-2),pch=16,col="blue")
+```
+
+## Correlation and sample size
+An extremely important point is that the correlation coefficient is influenced by sample size. It is far easier to reject the null hypothesis that $\rho=0$ with a large sample size than it is with a small sample size.
+
+For large sample size, critial t value is approximately $2/\sqrt{n}$
+
+```{r}
+n <- c(10,15,20,30,50,100,250,500,1000)
+r <- round(2/sqrt(n),3)
+df <- data.frame(n,r)
+names(df) <- c("Sample size", "Minimum absolute value of r needed to attain significance")
+library(knitr)
+kable(df)
+```
+
+
+## Spearman's correlation
+* Spearman’s rho
+    + Pearson’s correlation on the ranked data
+
+$$r_{S} = 1 - \frac{6\sum_{i=1}^{n}d_{i}^{2}}{n^3-n}$$
+
+### Problem
+World’s Biggest Liar competition
+
+* 68 contestants
+* Measures
+    + Where they were placed in the competition (first, second, third, etc.)
+    + Creativity questionnaire (maximum score 60)
+
+
+### Solution
+```{r}
+url <- "data/TheBiggestLiar.csv"
+liarData <- read.csv(url,header = TRUE)
+library(knitr)
+## display first ten rows
+kable(head(liarData,n = 10))
+plot(liarData$Creativity,liarData$Position)
+cor(liarData$Position, liarData$Creativity, method = "spearman")
+cor.test(liarData$Position, liarData$Creativity, alternative = "less", method = "spearman")
+
+```
