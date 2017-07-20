@@ -13,3 +13,5 @@
 * [workshop materials](http://spatial.binghamton.edu/workshop/)
 
 * [rseek.org](http://rseek.org/)
+
+* [R-ArcGIS](http://r-arcgis.github.io/)

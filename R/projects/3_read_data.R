@@ -31,14 +31,22 @@ which.min(v)
 
 
 ####  read CSV file
-df <- read.csv("students.csv")
+# df <- read.csv("students.csv")
+
+df <- read.csv("students.csv",stringsAsFactors = FALSE)
 str(df)
+df$Last.Name
+
 df$Last.Name <- as.character(df$Last.Name)
 df$First.Name <- as.character(df$First.Name)
 str(df)
 df <- read.csv("students.csv",header = TRUE,as.is = TRUE)
 str(df)
 
+df$NEWSAT <- df$SAT / 2
+
+
+write.csv(df,file = "newstudent.csv")
 
 ### write csv file
 df <- read.csv("students.csv")
@@ -70,7 +78,7 @@ SAT <- df$SAT
 basicStats(SAT)
 summary(SAT)
 hist(SAT)
-hist(df$SAT,main = "Histogram of SAT Score",xlab = "SAT Score",ylab = "Frequency",col="green")
+hist(df$SAT,main = "Histogram of SAT Score",xlab = "SAT Score",ylab = "Frequency",col="BLUE")
 
 
 ### descriptive statistics by groups
