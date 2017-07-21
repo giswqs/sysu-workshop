@@ -9,6 +9,8 @@ cor.test(x,y)
 cor.test(x,y,method="spearman")
 
 df <- read.csv("data/ExamAnxiety.csv",header = TRUE)
+df <- read.csv("data/ExamAnxiety.csv")
+
 plot(df)
 
 x <- seq(from=0,to = 1,length.out = 100)
